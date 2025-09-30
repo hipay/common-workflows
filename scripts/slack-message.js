@@ -1,8 +1,10 @@
 'use strict';
 
-const { tickets } = require('./artifact.json');
+const artifact = require('./artifact.json');
 
 (async () => {
+  console.log('Preparing Slack message...', artifact);
+
   const payload = {
     channel: process.env.SLACK_CHANNEL_ID,
     blocks: [
@@ -42,8 +44,8 @@ const { tickets } = require('./artifact.json');
     ]
   };
 
-  if (tickets.length) {
-    tickets.forEach((ticket) => {
+  if (artifact.tickets?.length) {
+    artifact.tickets.forEach((ticket) => {
       ticket = ticket.toUpperCase();
       payload.blocks[2].elements[0].elements.push({
         type: 'rich_text_section',
@@ -59,6 +61,16 @@ const { tickets } = require('./artifact.json');
   } else {
     payload.blocks.splice(2, 1);
     payload.blocks.splice(1, 1);
+
+    if (artifact.jira_version) {
+      payload.blocks.push({
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `:clipboard: JIRA Version - <${artifact.jira_version.url}|${artifact.jira_version.name}>`
+        }
+      });
+    }
   }
 
   console.log('payload', payload);
