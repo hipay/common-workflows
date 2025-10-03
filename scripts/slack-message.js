@@ -67,7 +67,7 @@ const artifact = require('./artifact.json');
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `:clipboard: JIRA Version - <${artifact.jira_version.url}|${artifact.jira_version.name}>`
+          text: `:clipboard: JIRA Version : <${artifact.jira_version.url}|${artifact.jira_version.name}>`
         }
       });
     }
