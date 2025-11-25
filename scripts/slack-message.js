@@ -1,6 +1,9 @@
 'use strict';
 
-const artifact = require('./artifact.json');
+const fs = require('fs');
+const artifact = fs.existsSync('./artifact.json')
+  ? require('./artifact.json')
+  : null;
 
 (async () => {
   console.log('Preparing Slack message...', artifact);
@@ -44,7 +47,7 @@ const artifact = require('./artifact.json');
     ]
   };
 
-  if (artifact.tickets?.length) {
+  if (artifact?.tickets?.length) {
     artifact.tickets.forEach((ticket) => {
       ticket = ticket.toUpperCase();
       payload.blocks[2].elements[0].elements.push({
@@ -62,7 +65,7 @@ const artifact = require('./artifact.json');
     payload.blocks.splice(2, 1);
     payload.blocks.splice(1, 1);
 
-    if (artifact.jira_version) {
+    if (artifact?.jira_version) {
       payload.blocks.push({
         type: 'section',
         text: {
